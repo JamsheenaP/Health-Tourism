@@ -9,3 +9,33 @@ Health tourism is a fast growing multibillion-dollar industry around the world a
  Registered User : The registered user can see all the information regarding the packages and the client will be able to apply for the packages that are available. The user can choose his own time and date for the package.
 
  General User : The clients can see the package without Registration. But the client wont get more information about that. The client needs more information regarding that then they should register to the application.
+
+## How to set up
+
+Database : Here we are using MySQL database. Create a table in MySQL database with the name health or you can create a table in MySQL database and in the folder health open settings.py in your editor and scroll down to databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '<YOUR_TABLE_NAME>',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': ''
+    }
+}
+
+Now in the terminal, run the following commands:
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+## Starting the app
+
+In order, to run the application run the following command in the terminal
+
+python manage.py runserver
+
+Then visit, http://localhost:8000/
+
+
