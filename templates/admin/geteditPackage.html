@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+{%load static %}
+{%include "admin/adminsidebar.html" %}
+<head>
+  <script src="{%static 'admin/dist/js/jquery-3.4.1.min.js' %}"></script>
+  <script>
+      $(function(){
+            $('#district2').change( function(){
+                 var district = $(this).val();
+                 $.ajax({
+                      url: ('{% url "gettitles" %}'),
+                      type: 'GET',
+                      data: {"district": district},
+                      success: function(response) {
+                          var packages = response;
+                          $("#title2").empty();
+                          $.each(response, function(i,package){
+                                   alert(package.id);
+                                   $("#title2").append($("<option></option>", {"value":package.id, "text":package.title}));
+                          });
+
+                      },
+                      error:function( result ){ alert( result); }
+                 });
+
+            });
+      });
+
+
+        </script>
+
+</head>
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0 text-dark">Package Details</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Edit Package Details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="{%url 'geteditPackage'  %}" method="post" >
+                {%csrf_token%}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="title">Title of the package</label>
+                    <input type="text" class="form-control" id="title" placeholder="Enter Title" name="title">
+                    <div class="card-footer">
+                      <button type="submit" class="btn btn-primary">Get package Details</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <form action="{%url 'updatePackage'%}" method="post" enctype="multipart/form-data" >
+                {%csrf_token%}
+                <input type="hidden" name="id" value="{{package.id}}">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="title">Title of the package</label>
+                    <input type="text" class="form-control" name ="title1" id="title1" value="{{package.title}}" placeholder="Enter Title">
+                    <label for="district">District</label>
+                    <select class="form-control select2" style="width: 100%;" id="district" name="district">
+                      <option value="0">--Select--</option>
+                      {%for d in district%}
+                        {% if d == package.district %}
+                          <option value="{{d.id}}" selected>{{d.district_name}}</option>
+                        {%else%}
+                          <option value="{{d.id}}" >{{d.district_name}}</option>
+                        {%endif%}
+                      {%endfor%}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="place">Place</label>
+                    <select class="form-control select2" style="width: 100%;" id="place" name="place">
+                      <option value="0">--Select--</option>
+                      {%for pla in plac%}
+                        {%if pla == package.place %}
+                          <option value="{{pla.id}}" selected>{{pla.place}}</option>
+                        {%else%}
+                          <option value="{{pla.id}}">{{pla.place}}</option>
+                        {%endif%}
+
+                      {%endfor%}
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control select2" style="width: 100%;" id="category" name="category">
+                      <option value="0">--Select--</option>
+                      {%for cat in cats%}
+                        {%if cat == package.category %}
+                          <option value="{{cat.id}}" selected>{{cat.category}}</option>
+                        {%else%}
+                          <option value="{{cat.id}}">{{cat.category}}</option>
+                        {%endif%}
+                      {%endfor%}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="desc">Short Description</label>
+                    <textarea class="form-control" id="desc" rows = "7" name="desc">{{package.description}}</textarea>
+                  </div>
+                   <div class="form-group">
+                    <label for="itin">Itinerary</label>
+                    <textarea class="form-control" id="itin" rows = "10" name="itin">{{package.itin}}</textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="price">Price of the package</label>
+                    <input type="text" class="form-control" id="price" placeholder="Enter Price" value="{{package.price}}" name="price">
+                  </div>
+                  <div class="form-group">
+                    <img src="/uploads/{{package.image}}"><br>
+                    <label for="image">Select Image</label>
+                    <div class="input-group">
+                      <div>
+                        <input type="file" name="image" id="image">
+                        <!--<label class="custom-file-label" for="image">Choose File</label>-->
+                      </div>
+                    </div>
+                  </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Update package Details</button>
+                </div>
+
+            </div>
+              </form>
+            <!-- /.card -->
+          </div>
+        </div>
+
+
+
+
+      </div><!-- /.container-fluid -->
+      </div>
+
+    </section>
+
+
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+</html>
